@@ -7,7 +7,15 @@ async function userSignup(req, res) {
     email,
     password,
   });
-  res.render("index");
+  res.redirect("/");
 }
 
-export { userSignup };
+async function userLogin(req, res) {
+  const { email, password } = req.body;
+  const user = User.findOne({ email, password });
+  if (!user) {
+    return res.render("login", { error: "Invalid Username or password" });
+  }
+  return res.redirect("/");
+}
+export { userSignup, userLogin };
