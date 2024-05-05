@@ -8,7 +8,10 @@ import connectToMongo from "./connection.js";
 import urlRouter from "./routes/url.routes.js";
 import staticRouter from "./routes/static.routes.js";
 import userRouter from "./routes/user.routes.js";
-import retrictToLoggedinUserOnly from "./middleware/auth.middleware.js";
+import {
+  retrictToLoggedinUserOnly,
+  checkAuth,
+} from "./middleware/auth.middleware.js";
 
 const app = express();
 
@@ -30,7 +33,7 @@ app.set("views", view_path);
 
 connectToMongo(process.env.DB_URI).then(() => console.log("Mongodb Connected"));
 
-app.use("/", staticRouter);
+app.use("/", checkAuth, staticRouter);
 app.use("/url", retrictToLoggedinUserOnly, urlRouter);
 app.use("/user", userRouter);
 

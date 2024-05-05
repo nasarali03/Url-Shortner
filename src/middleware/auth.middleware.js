@@ -1,7 +1,6 @@
 import { getUser } from "../service/auth.js";
 
 async function retrictToLoggedinUserOnly(req, res, next) {
-  console.log(req);
   const userId = req.cookies?.uid;
 
   if (!userId) return res.redirect("/login");
@@ -9,8 +8,17 @@ async function retrictToLoggedinUserOnly(req, res, next) {
 
   if (!user) return res.redirect("/login");
 
-  res.user = user;
+  req.user = user;
   next();
 }
 
-export default retrictToLoggedinUserOnly;
+async function checkAuth(req, res, next) {
+  const userId = req.cookies?.uid;
+
+  const user = getUser(userId);
+
+  req.user = user;
+  next();
+}
+
+export { retrictToLoggedinUserOnly, checkAuth };
