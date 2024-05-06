@@ -21,7 +21,8 @@ async function userLogin(req, res) {
   }
 
   const token = setUser(user);
-  console.log("Token:", token);
-  return res.status(200).cookie("uid", token).redirect("/");
+
+  // return res.status(200).cookie("uid", token).redirect("/");
+  res.json({ token });
 }
 export { userSignup, userLogin };

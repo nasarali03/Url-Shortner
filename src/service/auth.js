@@ -11,7 +11,6 @@ function setUser(user) {
 }
 
 function getUser(token) {
-  console.log("Tokn in getuser", token);
   if (!token) return null;
 
   try {

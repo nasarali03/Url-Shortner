@@ -1,10 +1,22 @@
 import { getUser } from "../service/auth.js";
 
+function checkForAuthantication(req, res, next) {
+  const autharizationHeaderValue = req.headers["autharization"];
+  req.user = null;
+  if (
+    !autharizationHeaderValue ||
+    autharizationHeaderValue.startsWith("Bearer")
+  )
+    return next();
+}
+
 async function retrictToLoggedinUserOnly(req, res, next) {
-  const userId = req.cookies?.uid;
+  const userId = req.headers["authorization"];
 
   if (!userId) return res.redirect("/login");
-  const user = getUser(userId);
+  const token = userId.split("Bearer ")[1];
+
+  const user = getUser(token);
 
   if (!user) return res.redirect("/login");
 
@@ -13,9 +25,9 @@ async function retrictToLoggedinUserOnly(req, res, next) {
 }
 
 async function checkAuth(req, res, next) {
-  const userId = req.cookies?.uid;
-
-  const user = getUser(userId);
+  const userId = req.headers["authorization"];
+  const token = userId.split("Bearer ")[1];
+  const user = getUser(token);
 
   req.user = user;
   next();
