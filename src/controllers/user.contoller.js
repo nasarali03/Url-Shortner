@@ -22,7 +22,7 @@ async function userLogin(req, res) {
 
   const token = setUser(user);
 
-  // return res.status(200).cookie("uid", token).redirect("/");
-  res.json({ token });
+  return res.status(200).cookie("token", token).redirect("/");
+  // res.json({ token });
 }
 export { userSignup, userLogin };
